@@ -1,0 +1,55 @@
+<h1>LIGHTS</h1>
+
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    console.log("page is ready to call function");
+    checkStatus();
+  });
+
+  function pinOn() {
+    $.ajax({
+      url: "/lights/command",
+      data: {data: 'on'},
+      type: 'get',
+    })
+    .success(function(){
+      checkStatus();
+    });
+  };
+
+  function pinOff() {
+    $.ajax({
+      url: "/lights/command",
+      data: {data: 'off'},
+      type: 'get',
+    })
+    .success(function(){
+      checkStatus();
+    });
+  };
+
+  function checkStatus() {
+    $.ajax({
+      url: "lights/status",
+      type: 'get',
+    })
+    .success(function(data){
+      console.log(data)
+      if (data == 0) {
+        $("#on").css("background-color", "red");
+      }
+      else if (data == 1) {
+        $("#on").css("background-color", "green");
+      };
+    });
+  }
+</script>
+
+<button type="button" name="button" onclick="pinOn()">lights ON</button>
+<button type="button" name="button" id="on" onclick="checkStatus()">|  |</button>
+<button type="button" name="button" onclick="pinOff()">lights OFF</button>
+<button type="button" name="button" id="off">|  |</button>
+<button type="button" name="button" onclick="pinBlink()">Blink</button>
+
+<h1><%= @status %></h1>
